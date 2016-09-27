@@ -1,0 +1,36 @@
+<!-- Credits: Zion -->
+
+<!DOCTYPE html>
+<html ng-app = 'CompareImgApp'>
+  <head>
+    <meta charset="utf-8">
+    <title>Title goes here</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div ng-controller="TryCtrl">
+
+      <p id ='debug'>null-img src has imgdata of all zeros</p>
+      <p>{{debug}}</p>
+
+
+
+      <h1>Img1 is: <input type="text" ng-model="img1Name" >
+      <button ng-click = 'load_img1()'>Load</button>  </h1>
+      <h1>Img2 is: <input type="text" ng-model="img2Name" >
+      <button ng-click = 'load_img2()'>Load</button>  </h1>
+
+
+      <button ng-click = 'compare()'>Compare</button>
+      <br>
+      <img class = 'logo'   id = 'img1' ng-src="{{img1src}}" alt = "img1 didn't load">
+      <img class = 'logo'   id = 'img2' ng-src="{{img2src}}" alt = "img2 didn't load">
+      <p>{{"output:   " + output}}</p>
+      </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script><!---->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src='script.js'> </script>
+
+  </body>
+</html>
