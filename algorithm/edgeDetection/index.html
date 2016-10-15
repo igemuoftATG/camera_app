@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Javascript Edge Detection</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <img src= "sample2.png" class= "images" id="image" alt="didn't load">
+      <canvas class = "images" id="layer"> </canvas>
+      <canvas class = "images" id='rawData'> </canvas>
+    </div>
+
+    <br>
+    Threshold: <input type="input" id="threshold" value="20">
+    <button onclick="detect()">Detect</button>
+    <p>^Not-Sensitive-ness level
+    <br>The calculator uses the Lab color space, so threshold should be in (0,100)</p>
+
+    <br>
+    <pre id = 'debug'>debug message here</pre>
+    <pre id = 'debug_img'>debug_img message here</pre>
+
+    <pre id = 'coordinate'>coordinate here</pre>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script><!---->
+    <script src = "edgeDetector.js"></script><!---->
+    <script src = "script.js"></script><!---->
+    <script src = "colorScript.js"></script><!---->
+  </body>
+</html>

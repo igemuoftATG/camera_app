@@ -1,0 +1,24 @@
+﻿body{
+  background: lightblue;
+}
+.wrapper{
+  padding: 5px;
+  background: #FEFEFE;
+  display: inline-block;
+  box-shadow:0px 0px 4px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  padding-bottom: 1px;
+  margin-bottom: 20px;
+}
+#debug{
+  background: pink;
+  width:400px;
+}
+#debug_img{
+  background: cyan;
+  width:400px;
+}
+#coordinate{
+  background: yellow;
+  width:400px;
+}
