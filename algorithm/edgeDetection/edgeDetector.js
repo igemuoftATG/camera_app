@@ -12,9 +12,7 @@ function edgeDetector(){
   };
   this.pixelData = undefined;
 
-  this.edgeDataX  = [];
-  this.edgeDataY  = [];
-  this.well = [];
+  this.wells = [];
   this.wellData = [];
 
   this.threshold = undefined; //default value
@@ -52,7 +50,7 @@ function edgeDetector(){
     this.ctx.drawImage(this.imgElement,0,0);//*/
   };
 
-  this.findEdges = function(bound){ //[t,d,l,r] rect bound
+  this.findEdges = function(bound){ //[t,d,l,r] -> [[x],[y]]
     //$('#debug').html("in coreLoop");
 
     var x = 0;
@@ -64,7 +62,8 @@ function edgeDetector(){
     var bottom = undefined;
 
     var detected = false;
-
+    var edgeDataX = [];
+    var edgeDataY = [];
     for(y=bound[0];y<=bound[1];y++){
       for(x=bound[2];x<=bound[3];x++){
           index = (x + y*this.ctxDimensions.width)*4;
@@ -89,16 +88,17 @@ function edgeDetector(){
               detected = true;
           }//*/
           if (detected){
-            this.edgeDataX.push(x);
-            this.edgeDataY.push(y);
+            edgeDataX.push(x);
+            edgeDataY.push(y);
             this.plotPoint(x,y);
             detected = false;
           }
       }}
+      return [edgeDataX,edgeDataY];
   };
 
   this.plotPoint = function(x,y){
-      //$('#debug').html("in plotPoint");
+      $('#debug').html("in plotPoint");
 
       this.ctx.fillStyle ='green';
       this.ctx.fillRect(x, y, 0.6, 0.6);
@@ -107,41 +107,52 @@ function edgeDetector(){
       this.rawctx.fillRect(x, y, 0.7, 0.7);
   };
 
-  this.findCircle = function(){
-    //$('#debug').html("in findCircles");
-    var top = Math.min.apply(null,this.edgeDataY);
-    var bot = Math.max.apply(null,this.edgeDataY);
-    var left = Math.min.apply(null,this.edgeDataX);
-    var right = Math.max.apply(null,this.edgeDataX);
+  this.findCircle = function(points){
+    $('#debug').html("in findCircles");
+    var top = Math.min.apply(null,points[1]);
+    var bot = Math.max.apply(null,points[1]);
+    var left = Math.min.apply(null,points[0]);
+    var right = Math.max.apply(null,points[0]);
 
-    this.well = [(left+right)/2,(top+bot)/2,(bot-top + right-left)/4*0.90];
+    var currWell = [(left+right)/2,(top+bot)/2,(bot-top + right-left)/4*0.90];
+    this.wells.push(currWell);
     this.rawctx.beginPath();
     this.rawctx.fillStyle = 'black';
     //the following code uses circle with 90% of avg radius
-    this.rawctx.arc(this.well[0],this.well[1],this.well[2],0,2*Math.PI);
+    this.rawctx.arc(currWell[0],currWell[1],currWell[2],0,2*Math.PI);
     this.rawctx.stroke();
 
     //$('#debug').html();
   }
 
-  this.getInfos = function(){
+  this.compareWithControl = function(wellNum){
     var temp;
-    var wellData = [];
-    for(var x=this.well[0];x<=this.well[0];x++){
-      temp = Math.pow(Math.pow(this.well[2],2)-x*x,0.5)
-      for(var y=this.well[1]-temp;y<=this.well[1]+temp;y++){
+    var control = this.wells[0];
+    var currWell = this.wells[wellNum];
+    /*
+    for(var x=currWell[0];x<=currWell[0];x++){
+      temp = parseInt(Math.pow(Math.pow(currWell[2],2)-x*x,0.5));
+      for(var y=currWell[1]-temp;y<=currWell[1]+temp;y++){
         index = (x + y*this.ctxDimensions.width)*4;
 
-        wellData.push(this.pixelData.data[index]);
-        wellData.push(this.pixelData.data[index+1]);
-        wellData.push(this.pixelData.data[index+2]);
-      }}
+        currWellData.push(this.pixelData.data[index]);
+        currWellData.push(this.pixelData.data[index+1]);
+        currWellData.push(this.pixelData.data[index+2]);
+      }}*/
   }
 
-  this.clearEdgeData = function(){
-    this.edgeDataX  = [];
-    this.edgeDataY  = [];
-    this.well = [];
+  this.compareWithControl = function(wellNum){
+    var control = getWellData(0);
+    for (var i = 0; i < array.length; i++) {
+      colorsDiff(getWellData(1))
+    }
+
+    return results;
+
+  }
+
+  this.clearWellData = function(){
+    this.wells = [];
     this.wellData = [];
   }
 }

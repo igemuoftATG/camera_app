@@ -7,12 +7,16 @@
   </head>
   <body>
     <div class="wrapper">
-      <img src= "logo1.png" class= "images" id="image" alt="didn't load">
+      <img src= "sample2.png" class= "images" id="image" alt="didn't load">
       <canvas class = "images" id="layer"> </canvas>
       <canvas class = "images" id='rawData'> </canvas>
     </div>
 
     <br>
+    rows: <input type="input" id="rows" value=0>
+    columns: <input type="input" id="cols" value=0>
+    <br>Doesn't work properly if you entered the wrong grid size
+    <br><br>
     Threshold: <input type="input" id="threshold" value="20">
     <button onclick="detect()">Detect</button>
     <p>^Not-Sensitive-ness level

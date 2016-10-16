@@ -1,5 +1,31 @@
 //alert('alert message goes here');
 // prompt("prompt message",'input box default values')
+function colorsDiff(data1,data2){
+	var v1;
+	var v2;
+	var lab1;
+	var lab2;
+	for (var i = 0; i < data1.length; i+=4) {
+		v1 = data1.slice(i,i+3);
+		lab1 = RGBtoLAB(v1);
+
+		v2 = data2.slice(i,i+3);
+		lab2 = RGBtoLAB(v2);
+
+		sum_diff += Math.abs(euclidean_distance(lab1,lab2));
+	}
+	var result = sum_diff / (img1.width * img1.height);
+
+	/*/{
+		sum_diff += Math.abs(v1[0]-v2[0]);
+		sum_diff += Math.abs(v1[1]-v2[1]);
+		sum_diff += Math.abs(v1[2]-v2[2]);
+	}
+	var result = 100 * sum_diff / (data1.length/4 * 3 * 255);//*/
+
+	$('#debug').html('passed');
+	return result;
+}
 function colorDiff(p1,p2){ // vi is [r,g,b]
 	//$('#debug').html("in colorScript.js");
 	v1 = [p1[0]+0,p1[1]+0,p1[2]+0];

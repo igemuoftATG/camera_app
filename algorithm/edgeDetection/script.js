@@ -6,25 +6,37 @@ detector.init();
 
 function detect(){
   $('#debug').html("loading");
-  var user_input = document.getElementById("threshold").value;
+  var user_input = $("#threshold")[0].value;
   detector.threshold = Number(user_input);
 
   detector.clearCanvas();
-  var col = 5;
-  var row = 1;
-  var rSpace = detector.ctxDimensions.height/row;
-  var cSpace = detector.ctxDimensions.width/col;
-  for (var r = 1; r <= row; r++) {
-    for (var c = 1; c <= col; c++) {
-      detector.clearEdgeData();
-      detector.findEdges([(r-1)*rSpace,r*rSpace,(c-1)*cSpace,c*cSpace]);
-      detector.findCircle();
-    }
-  }
-
-
+  detector.clearWellData();
+  loopThroughSample(detector);
 
   $('#debug').html("done");
+}
+
+function loopThroughSample(d){
+  var row = $("#rows")[0].value;
+  var col = $("#cols")[0].value;
+  var rSpace = d.ctxDimensions.height/row;
+  var cSpace = d.ctxDimensions.width/col;
+  //control as the first well (r,c) = (0,0)
+  d.findCircle(d.findEdges([0,rSpace,0,cSpace]));
+  //rest of first row
+  for (var c = 1; c < col; c++) {
+    //$('#debug').html(c);
+    d.findCircle(d.findEdges([0,rSpace,c*cSpace,(c+1)*cSpace]));
+    //d.compareWithControl(r*col+c);
+  }
+  //rest of the rows
+  for (var r = 1; r < row; r++) {
+    for (var c = 0; c < col; c++) {
+      //$('#debug').html(c);
+      d.findCircle(d.findEdges([r*rSpace,(r+1)*rSpace,c*cSpace,(c+1)*cSpace]));
+      //d.compareWithControl(r*col+c);
+    }
+  }
 }
 
 $(function() {// tracks the canvas and for debug
