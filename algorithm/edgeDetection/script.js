@@ -2,13 +2,28 @@ var img_used = document.getElementById("image");
 detector.imgElement = img_used;
 detector.init();
 
+
+
 function detect(){
   $('#debug').html("loading");
   var user_input = document.getElementById("threshold").value;
   detector.threshold = Number(user_input);
-  detector.clearEdgeData();
-  detector.findEdges();
-  detector.findCircles();
+
+  detector.clearCanvas();
+  var col = 5;
+  var row = 1;
+  var rSpace = detector.ctxDimensions.height/row;
+  var cSpace = detector.ctxDimensions.width/col;
+  for (var r = 1; r <= row; r++) {
+    for (var c = 1; c <= col; c++) {
+      detector.clearEdgeData();
+      detector.findEdges([(r-1)*rSpace,r*rSpace,(c-1)*cSpace,c*cSpace]);
+      detector.findCircle();
+    }
+  }
+
+
+
   $('#debug').html("done");
 }
 

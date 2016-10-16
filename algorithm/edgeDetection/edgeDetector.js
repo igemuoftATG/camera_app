@@ -39,25 +39,20 @@ function edgeDetector(){
     // Store the Canvas Size
     this.ctxDimensions.width = width;
     this.ctxDimensions.height = height;
-  };
-
-  this.findEdges = function(){
-    //$('#debug').html("in findEdges");
-    this.copyImage();
-    this.coreLoop();
-  };
-
-  this.copyImage = function(){
-    //$('#debug').html("in copyImage");
-    this.rawctx.clearRect(0,0,this.ctxDimensions.width,this.ctxDimensions.height);
 
     this.ctx.drawImage(this.imgElement,0,0);
-
     this.pixelData = this.ctx.getImageData(0,0,this.ctxDimensions.width, this.ctxDimensions.height);
-    //$('#debug').html("passed");
   };
 
-  this.coreLoop = function(){
+  this.clearCanvas = function(){
+    //$('#debug').html("in copyImage");
+    this.rawctx.clearRect(0,0,this.ctxDimensions.width,this.ctxDimensions.height);
+    //* The following is optional, omitting them can speed things up
+    this.ctx.clearRect(0,0,this.ctxDimensions.width,this.ctxDimensions.height);
+    this.ctx.drawImage(this.imgElement,0,0);//*/
+  };
+
+  this.findEdges = function(bound){ //[t,d,l,r] rect bound
     //$('#debug').html("in coreLoop");
 
     var x = 0;
@@ -69,11 +64,9 @@ function edgeDetector(){
     var bottom = undefined;
 
     var detected = false;
-    var xPad = 0;
-    var yPad = 0;
 
-    for(y=yPad;y<this.pixelData.height-yPad;y++){
-      for(x=xPad;x<this.pixelData.width-xPad;x++){
+    for(y=bound[0];y<=bound[1];y++){
+      for(x=bound[2];x<=bound[3];x++){
           index = (x + y*this.ctxDimensions.width)*4;
 
           pixel = this.pixelData.data.slice(index,index+3);
@@ -114,7 +107,7 @@ function edgeDetector(){
       this.rawctx.fillRect(x, y, 0.7, 0.7);
   };
 
-  this.findCircles = function(){
+  this.findCircle = function(){
     //$('#debug').html("in findCircles");
     var top = Math.min.apply(null,this.edgeDataY);
     var bot = Math.max.apply(null,this.edgeDataY);
