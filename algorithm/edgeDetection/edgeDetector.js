@@ -13,7 +13,8 @@ function edgeDetector(){
   this.pixelData = undefined;
 
   this.wells = [];
-  this.wellData = [];
+  this.wellDiff = [];
+  this.control = [];
 
   this.threshold = undefined; //default value
 
@@ -126,34 +127,56 @@ function edgeDetector(){
   }
 
   this.compareWithControl = function(wellNum){
+    $('#debug').html("in compareWithControl");
     var temp;
-    var control = this.wells[0];
     var currWell = this.wells[wellNum];
-    /*
-    for(var x=currWell[0];x<=currWell[0];x++){
-      temp = parseInt(Math.pow(Math.pow(currWell[2],2)-x*x,0.5));
-      for(var y=currWell[1]-temp;y<=currWell[1]+temp;y++){
-        index = (x + y*this.ctxDimensions.width)*4;
 
-        currWellData.push(this.pixelData.data[index]);
-        currWellData.push(this.pixelData.data[index+1]);
-        currWellData.push(this.pixelData.data[index+2]);
-      }}*/
+    var sum_diff = 0;
+    var xControl;
+    var xWell;
+    var yControl;
+    var yWell;
+    var deltaX = currWell[2];
+    var deltaY;
+    var total_pixels = 0;
+
+    for(var i=-deltaX;i<=deltaX;i++){
+      xControl = this.control[0]+i;
+      xWell = currWell[0]+i;
+
+      deltaY = parseInt(Math.pow(Math.pow(currWell[2],2)-(i*i),0.5));
+      for(var j=-deltaY;j<=deltaY;j++){
+
+        total_pixels++;
+        yControl = this.control[1]+j;
+        yWell = currWell[1]+j;
+
+        iControl = (xControl + yControl*this.ctxDimensions.width)*4;
+        iWell = (xWell + yWell*this.ctxDimensions.width)*4;
+
+    		sum_diff += colorDiff(this.pixelData.data.slice(iControl,iControl+3),this.pixelData.data.slice(iWell,iWell+3));
+      }}//*/
+      //$('#debug').html('passed');
+    return sum_diff / total_pixels;
   }
 
-  this.compareWithControl = function(wellNum){
-    var control = getWellData(0);
-    for (var i = 0; i < array.length; i++) {
-      colorsDiff(getWellData(1))
+  this.updateWellDiff= function(r,c,diff){
+    this.wellDiff[r][c] = diff;
+  }
+
+  this.updateGrid = function(r,c){
+    for (var i = 0; i < r; i++) {
+      this.wellDiff.push([]);
+      for (var j = 0; j < c; j++) {
+        this.wellDiff[i].push(0);
+        //$('#debug').html("here");
+      }
     }
-
-    return results;
-
   }
 
   this.clearWellData = function(){
     this.wells = [];
-    this.wellData = [];
+    this.wellDiff = [];
   }
 }
 var detector = new edgeDetector();

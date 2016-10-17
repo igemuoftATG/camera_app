@@ -12,31 +12,40 @@ function detect(){
   detector.clearCanvas();
   detector.clearWellData();
   loopThroughSample(detector);
-
-  $('#debug').html("done");
 }
 
 function loopThroughSample(d){
   var row = $("#rows")[0].value;
   var col = $("#cols")[0].value;
+  if (row == 0 || col == 0){
+    $('#debug').html("don't use zero please");
+    return ;
+  }
+  d.updateGrid(row,col);
+  //*
   var rSpace = d.ctxDimensions.height/row;
   var cSpace = d.ctxDimensions.width/col;
   //control as the first well (r,c) = (0,0)
   d.findCircle(d.findEdges([0,rSpace,0,cSpace]));
+  d.control = d.wells[0];
+  //d.compareWithControl(0); //this should be 0
+
   //rest of first row
   for (var c = 1; c < col; c++) {
-    //$('#debug').html(c);
     d.findCircle(d.findEdges([0,rSpace,c*cSpace,(c+1)*cSpace]));
-    //d.compareWithControl(r*col+c);
+    d.updateWellDiff(0,c,d.compareWithControl(c));
   }
+
   //rest of the rows
   for (var r = 1; r < row; r++) {
     for (var c = 0; c < col; c++) {
       //$('#debug').html(c);
       d.findCircle(d.findEdges([r*rSpace,(r+1)*rSpace,c*cSpace,(c+1)*cSpace]));
-      //d.compareWithControl(r*col+c);
+      d.updateWellDiff(r,c,d.compareWithControl(r*col+c));
     }
-  }
+  }//*/
+
+  $('#debug').html("done\n"+d.wellDiff);
 }
 
 $(function() {// tracks the canvas and for debug
